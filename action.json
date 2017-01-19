@@ -2,7 +2,7 @@
   "versionLabel": "1.0.0",
   "agentInfo": {
     "languageCode": "en-US",
-    "projectId": "hello",
+    "projectId": "jiraactions",
     "voiceName": "male_1"
   },
   "actions": [
@@ -11,8 +11,9 @@
         "intent": "assistant.intent.action.MAIN"
       },
       "httpExecution": {
-        "url": "YOUR_ENDPOINT_URL"
+        "url": "https://64976a77.ngrok.io"
       }
     }
+    
   ]
 }

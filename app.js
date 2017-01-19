@@ -22,7 +22,7 @@ let express = require('express');
 let bodyParser = require('body-parser');
 
 let app = express();
-app.set('port', (process.env.PORT || 8080));
+app.set('port', (process.env.PORT || 8081));
 app.use(bodyParser.json({type: 'application/json'}));
 
 app.post('/', function (request, response) {
@@ -36,6 +36,10 @@ app.post('/', function (request, response) {
           '<say-as interpret-as="ordinal">123</say-as>. Say a number.</speak>',
           ['I didn\'t hear a number', 'If you\'re still there, what\'s the number?', 'What is the number?']);
     assistant.ask(inputPrompt);
+  }
+
+  function altIntent(assistant){
+    console.log('altIntent')
   }
 
   function rawInput (assistant) {
