@@ -1,19 +1,24 @@
 {
-  "versionLabel": "1.0.0",
-  "agentInfo": {
-    "languageCode": "en-US",
-    "projectId": "jiraactions",
-    "voiceName": "male_1"
-  },
-  "actions": [
-    {
-      "initialTrigger": {
-        "intent": "assistant.intent.action.MAIN"
-      },
-      "httpExecution": {
-        "url": "https://64976a77.ngrok.io"
-      }
-    }
-    
-  ]
+	"versionLabel": "1.0.0",
+	"agentInfo": 
+	{
+		"languageCode": "en-US",
+		"projectId": "jiraactions",
+		"voiceName": "male_1"
+	},
+
+	"actions": 
+	[
+		{
+			"initialTrigger": 
+			{
+				"intent": "assistant.intent.action.MAIN"
+			},
+
+			"httpExecution": 
+			{
+				"url": "https://64976a77.ngrok.io"
+			}
+		}
+	]
 }
