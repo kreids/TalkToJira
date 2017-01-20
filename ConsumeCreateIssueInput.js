@@ -7,7 +7,6 @@ function getIssueType(assistant, onSuccess){
 	
 	let dialogueState = assistant.getDialogState();
 	dialogueState.data.issueType = input;
-	dialogueState.state = 'getSummary';
 	
 	if(input==='story'){
 		onSuccess(assistant, dialogueState);

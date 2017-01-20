@@ -1,15 +1,30 @@
 /**
  * http://usejsdoc.org/
  */
+
+function askNextPrompt(assistant,dialogueState){
+	switch(dialogueState.state){
+	case 'start':
+		dialogueState.state = "getIssueType"
+		askIssueType(assistant,dialogueState);
+		break;
+	case 'getIssueType':
+		dialogueState.state = "getSummary"
+		askSummary(assistant,dialogueState);
+		break;
+	}
+		
+}
+
 function askIssueType(assistant, dialogueState){
 	let inputPrompt = assistant.buildInputPrompt(true, 
 			'What type of JIRA issue would you like to create?',
 			['I didn\'t hear an issue type']);
 	if(!dialogueState.data.issueType){
-		assistant.ask(inputPrompt,{'state':'getIssueType','data':{}});
+		assistant.ask(inputPrompt,dialogueState);
 	}
 	else{
-		
+		askNextPrompt(assistant,dialogueState);
 	}
 }
 
@@ -18,7 +33,6 @@ function askSummary(assistant, dialogueState){
 			'What would you like your summary to be?',
 			['Huh']);
 	if(!dialogueState.data.summary){
-		dialogueState.state = 'getSummary'
 		assistant.ask(inputPrompt,dialogueState);
 	}
 	else{
@@ -27,6 +41,5 @@ function askSummary(assistant, dialogueState){
 }
 
 module.exports = {
-		'askIssueType': askIssueType,
-		'askSummary': askSummary
+		'askNextPrompt': askNextPrompt
 }

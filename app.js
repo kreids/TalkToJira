@@ -26,14 +26,14 @@ let consumeCreateIssueInputs = require('./ConsumeCreateIssueInput.js')
 
 
 let app = express();
-app.set('port', (process.env.PORT || 8081));
+app.set('port', (process.env.PORT || 8082));
 app.use(bodyParser.json({type: 'application/json'}));
 
 
 
 function mainIntent (assistant) {
 	console.log('mainIntent: '+ assistant);
-	promptUserCreateIssue.askIssueType(assistant,{'state':'getIssueType','data':{}})
+	promptUserCreateIssue.askNextPrompt(assistant,{'state':'start','data':{}})
 }
 
 function rawInput (assistant) {
@@ -43,7 +43,7 @@ function rawInput (assistant) {
 	
 	switch(dialogueState.state){
 		case 'getIssueType':
-			consumeCreateIssueInputs.getIssueType(assistant,promptUserCreateIssue.askSummary);
+			consumeCreateIssueInputs.getIssueType(assistant,promptUserCreateIssue.askNextPrompt);
 			break;
 		case 'getSummary':
 			consumeCreateIssueInputs.getSummary(assistant);
