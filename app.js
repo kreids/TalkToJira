@@ -21,6 +21,8 @@ let ActionsSdkAssistant = require('actions-on-google').ActionsSdkAssistant;
 let express = require('express');
 let bodyParser = require('body-parser');
 
+let promptUserCreateIssue = require('./PromptUserCreateIssue.js')
+
 let app = express();
 app.set('port', (process.env.PORT || 8081));
 app.use(bodyParser.json({type: 'application/json'}));
@@ -29,28 +31,11 @@ app.use(bodyParser.json({type: 'application/json'}));
 
 function mainIntent (assistant) {
 	console.log('mainIntent: '+ assistant);
-	let inputPrompt = assistant.buildInputPrompt(true, 
+	promptUserCreateIssue.askIssueType(assistant,{'state':'getIssueType','data':{}})
+	/*let inputPrompt = assistant.buildInputPrompt(true, 
 			'What type of JIRA issue would you like to create?',
 			['I didn\'t hear an issue type']);
-	assistant.ask(inputPrompt,{'state':'getIssueType','data':{}});
-}
-
-function getIssueType(assistant){
-	let input = assistant.getRawInput();
-	
-	let inputPrompt = assistant.buildInputPrompt(true, 
-			'What would you like the summary of your ' + input +' to be',
-			['Huh?']);
-	let dialogueState = assistant.getDialogState();
-	dialogueState.data.issueType = input;
-	dialogueState.state = 'getSummary';
-	
-	
-	if(input==='story'){
-		assistant.ask(inputPrompt, dialogueState);
-	}else if(input==='task'){
-		assistant.ask(inputPrompt, dialogueState);
-	}
+	assistant.ask(inputPrompt,{'state':'getIssueType','data':{}});*/
 }
 
 function rawInput (assistant) {
@@ -62,19 +47,44 @@ function rawInput (assistant) {
 		case 'getIssueType':
 			getIssueType(assistant);
 			break;
+		case 'getSummary':
+			getSummary(assistant);
+			break;
 		
 	}
-	
-	/*if(state.state === 'getIssueType' && assistant.getRawInput() === 'story'){
-		state.state = ''
-		assistant.tell('Creating a story');
-	} else {
-		let inputPrompt = assistant.buildInputPrompt(true, '<speak>You said, <say-as interpret-as="ordinal">' +
-				assistant.getRawInput() + '</say-as></speak>',
-				['I didn\'t hear a number', 'If you\'re still there, what\'s the number?', 'What is the number?']);
-		assistant.ask(inputPrompt);
-	}*/
 }
+
+
+
+function getIssueType(assistant){
+	let input = assistant.getRawInput();
+	
+	/*let inputPrompt = assistant.buildInputPrompt(true, 
+			'What would you like the summary of your ' + input +' to be',
+			['Huh?']);*/
+	let dialogueState = assistant.getDialogState();
+	dialogueState.data.issueType = input;
+	dialogueState.state = 'getSummary';
+	
+	if(input==='story'){
+		promptUserCreateIssue.askSummary(assistant, dialogueState);
+		//assistant.ask(inputPrompt, dialogueState);
+	}else if(input==='task'){
+		//assistant.ask(inputPrompt, dialogueState);
+	}
+}
+
+
+
+function getSummary(assistant){
+	let dialogueState = assistant.getDialogState();
+	let input = assistant.getRawInput();
+	
+	dialogueState.data.summary = input;
+	
+	assistant.tell("Creating a "+ dialogueState.data.issueType+" with summary: "+ dialogueState.data.summary);
+}
+
 
 app.post('/', function (request, response) {
 	console.log('handle post');
