@@ -3,6 +3,7 @@
  */
 
 let promptUserCreateIssue = require('./PromptUserCreateIssue.js')
+let createIssue=require('./createIssue.js')
 
 
 function consumeInputCorrectly(assistant,dialogueState){
@@ -40,6 +41,7 @@ function getSummary(assistant){
 	dialogueState.data.summary = input;
 	
 	assistant.tell("Creating a "+ dialogueState.data.issueType+" with summary: "+ dialogueState.data.summary);
+	createIssue.makeIssue(dialogueState.data.summary,dialogueState.data.issueType);
 }
 
 module.exports ={
