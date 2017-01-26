@@ -40,15 +40,7 @@ function rawInput (assistant) {
 	console.log('rawInputIssueType: \'' +assistant.getRawInput()+'\'');
 	let dialogueState = assistant.getDialogState();
 	console.log('state: \''+ JSON.stringify(dialogueState) +'\'')
-	
-	switch(dialogueState.state){
-		case 'getIssueType':
-			consumeCreateIssueInputs.getIssueType(assistant,promptUserCreateIssue.askNextPrompt);
-			break;
-		case 'getSummary':
-			consumeCreateIssueInputs.getSummary(assistant);
-			break;
-	}
+	consumeCreateIssueInputs.consumeInputCorrectly(assistant,assistant.getDialogState())
 }
 
 app.post('/', function (request, response) {

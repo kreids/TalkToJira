@@ -2,10 +2,28 @@
  * http://usejsdoc.org/
  */
 
-function getIssueType(assistant, onSuccess){
+let promptUserCreateIssue = require('./PromptUserCreateIssue.js')
+
+
+function consumeInputCorrectly(assistant,dialogueState){
+	switch(dialogueState.state){
+	case 'start':
+		dialogueState.state = "getIssueType"
+		getIssueType(assistant,dialogueState,promptUserCreateIssue.askNextPrompt);
+		break;
+	case 'getIssueType':
+		dialogueState.state = "getSummary"
+		getSummary(assistant);
+		break;
+	}
+		
+}
+
+function getIssueType(assistant, dialogueState, onSuccess){
 	let input = assistant.getRawInput();
 	
-	let dialogueState = assistant.getDialogState();
+	//let dialogueState = assistant.getDialogState();
+	console.log(JSON.stringify(dialogueState));
 	dialogueState.data.issueType = input;
 	
 	if(input==='story'){
@@ -26,6 +44,5 @@ function getSummary(assistant){
 }
 
 module.exports ={
-		'getIssueType': getIssueType,
-		'getSummary': getSummary
+		'consumeInputCorrectly': consumeInputCorrectly
 }
