@@ -10,8 +10,7 @@ function askNextPrompt(assistant,dialogueState){
 	case 'getIssueType':
 		askSummary(assistant,dialogueState);
 		break;
-	}
-		
+	}		
 }
 
 function askIssueType(assistant, dialogueState){

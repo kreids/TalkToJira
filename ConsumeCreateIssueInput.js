@@ -16,7 +16,6 @@ function consumeInputCorrectly(assistant,dialogueState){
 		getSummary(assistant);
 		break;
 	}
-		
 }
 
 function getIssueType(assistant, dialogueState, onSuccess){
