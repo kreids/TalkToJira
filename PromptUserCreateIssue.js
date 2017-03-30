@@ -18,7 +18,7 @@ function askIssueType(assistant, dialogueState){
 			'What type of JIRA issue would you like to create?',
 			['I didn\'t hear an issue type']);
 	console.log(JSON.stringify(dialogueState));
-
+	dialogueState.state = 'getIssueType'
 	if(!dialogueState.data.issueType){
 		assistant.ask(inputPrompt,dialogueState);
 	}

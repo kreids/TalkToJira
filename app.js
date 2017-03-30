@@ -43,6 +43,14 @@ function rawInput (assistant) {
 	consumeCreateIssueInputs.consumeInputCorrectly(assistant,assistant.getDialogState())
 }
 
+function createIntent(assistant){
+	console.log('create intent')
+	let issueType = assistant.getArgument('issueType');
+	console.log('issueType: \''+ JSON.stringify(issueType) +'\'')
+	promptUserCreateIssue.askNextPrompt(assistant,{'state':'start','data'
+		:{'issueType':'story'}})
+}
+
 app.post('/', function (request, response) {
 	console.log('handle post');
 	const assistant = new ActionsSdkAssistant({request: request, response: response});
@@ -51,6 +59,7 @@ app.post('/', function (request, response) {
 
 	let actionMap = new Map();
 	actionMap.set(assistant.StandardIntents.MAIN, mainIntent);
+	actionMap.set('assistant.intent.create', createIntent);
 	actionMap.set(assistant.StandardIntents.TEXT, rawInput);
 
 	assistant.handleRequest(actionMap);
