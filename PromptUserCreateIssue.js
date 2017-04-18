@@ -10,6 +10,9 @@ function askNextPrompt(assistant,dialogueState){
 	case 'getIssueType':
 		askSummary(assistant,dialogueState);
 		break;
+	case 'getSummary':
+		complete(assistant,dialogueState)
+		break;
 	}		
 }
 
@@ -31,12 +34,18 @@ function askSummary(assistant, dialogueState){
 	let inputPrompt = assistant.buildInputPrompt(true, 
 			'What would you like your summary to be?',
 			['Huh']);
+	dialogueState.state = 'getSummary'
 	if(!dialogueState.data.summary){
 		assistant.ask(inputPrompt,dialogueState);
 	}
 	else{
-		
+		askNextPrompt(assistant,dialogueState);	
 	}
+}
+
+function complete(assistant, dialogueState){
+	assistant.tell("Creating a "+ dialogueState.data.issueType+" with summary: "+ dialogueState.data.summary);
+	createIssue.makeIssue(dialogueState.data.summary,dialogueState.data.issueType);
 }
 
 module.exports = {

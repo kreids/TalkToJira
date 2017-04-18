@@ -14,7 +14,7 @@ function consumeInputCorrectly(assistant,dialogueState){
 		break;
 	case 'getIssueType':
 		dialogueState.state = "getSummary"
-		getSummary(assistant);
+		getSummary(assistant,dialogueState,promptUserCreateIssue.askNextPrompt);
 		break;
 	}
 }
@@ -34,14 +34,13 @@ function getIssueType(assistant, dialogueState, onSuccess){
 	}
 }
 
-function getSummary(assistant){
+function getSummary(assistant,dialogueState, onSuccess){
 	let dialogueState = assistant.getDialogState();
 	let input = assistant.getRawInput();
 	
 	dialogueState.data.summary = input;
+	onSuccess(assistant, dialogueState);
 	
-	assistant.tell("Creating a "+ dialogueState.data.issueType+" with summary: "+ dialogueState.data.summary);
-	createIssue.makeIssue(dialogueState.data.summary,dialogueState.data.issueType);
 }
 
 module.exports ={

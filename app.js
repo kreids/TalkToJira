@@ -46,9 +46,16 @@ function rawInput (assistant) {
 function createIntent(assistant){
 	console.log('create intent')
 	let issueType = assistant.getArgument('issueType');
+	let summary = assistant.getArgument('summary');
+	let dialogueState={'state':'start','data':{}}
+	if(issueType){
+		dialogueState.data.issueType = issueType
+	}
+	if(summary){
+		dialogueState.data.summary = summary
+	}
 	console.log('issueType: \''+ JSON.stringify(issueType) +'\'')
-	promptUserCreateIssue.askNextPrompt(assistant,{'state':'start','data'
-		:{'issueType':'story'}})
+	promptUserCreateIssue.askNextPrompt(assistant,dialogueState)
 }
 
 app.post('/', function (request, response) {
