@@ -23,6 +23,7 @@ let bodyParser = require('body-parser');
 
 let promptUserCreateIssue = require('./PromptUserCreateIssue.js')
 let consumeCreateIssueInputs = require('./ConsumeCreateIssueInput.js')
+let moveIssue = require('./moveIssue.js')
 
 
 let app = express();
