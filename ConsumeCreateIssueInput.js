@@ -7,6 +7,7 @@ let createIssue=require('./createIssue.js')
 
 
 function consumeInputCorrectly(assistant,dialogueState){
+	console.log("STATE::::::::: "+dialogueState.state)
 	switch(dialogueState.state){
 	case 'start':
 		dialogueState.state = "getIssueType"
@@ -21,7 +22,8 @@ function consumeInputCorrectly(assistant,dialogueState){
 
 function getIssueType(assistant, dialogueState, onSuccess){
 	let input = assistant.getRawInput();
-	
+	console.log("**GETISSUETYPE**");
+
 	//let dialogueState = assistant.getDialogState();
 	console.log(JSON.stringify(dialogueState));
 	dialogueState.data.issueType = input;
@@ -35,10 +37,13 @@ function getIssueType(assistant, dialogueState, onSuccess){
 }
 
 function getSummary(assistant,dialogueState, onSuccess){
-	let dialogueState = assistant.getDialogState();
+	//let dialogueState = assistant.getDialogState();
+	console.log("**GETSUMMARY**");
+
 	let input = assistant.getRawInput();
 	
 	dialogueState.data.summary = input;
+	
 	onSuccess(assistant, dialogueState);
 	
 }
