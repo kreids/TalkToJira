@@ -21,9 +21,9 @@ let ActionsSdkAssistant = require('actions-on-google').ActionsSdkAssistant;
 let express = require('express');
 let bodyParser = require('body-parser');
 
-let promptUserCreateIssue = require('./PromptUserCreateIssue.js')
-let consumeInputs = require('./ConsumeInputs.js')
-let promptUserMoveIssue= require('./PromptUserMoveIssue.js')
+let promptUserCreateIssue = require('./PromptUser/PromptUserCreateIssue.js')
+let promptUserMoveIssue= require('./PromptUser/PromptUserMoveIssue.js')
+let consumeInputs = require('./ConsumeInput/ConsumeInputs.js')
 
 
 
