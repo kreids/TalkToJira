@@ -2,19 +2,23 @@
  * http://usejsdoc.org/
  */
 
- let createIssue=require('./createIssue.js')
+ let createIssue=require('./JiraControler/createIssue.js')
 
 
 function askNextPrompt(assistant,dialogueState){
 	console.log("STATE-------- "+dialogueState.state)
 	switch(dialogueState.state){
 	case 'start':
+		dialogueState.state= 'askIssueType'
+		askNextPrompt(assistant,dialogueState)
+		break;
+	case 'askIssueType':
 		askIssueType(assistant,dialogueState);
 		break;
-	case 'getIssueType':
+	case 'askSummary':
 		askSummary(assistant,dialogueState);
 		break;
-	case 'getSummary':
+	case 'done':
 		complete(assistant,dialogueState)
 		break;
 	}		
@@ -28,10 +32,11 @@ function askIssueType(assistant, dialogueState){
 	console.log(JSON.stringify(dialogueState));
 	//dialogueState.state = 'getIssueType'
 	if(!dialogueState.data.issueType){
+		dialogueState.state = "getIssueType"
 		assistant.ask(inputPrompt,dialogueState);
 	}
 	else{
-		dialogueState.state = 'getIssueType'
+		dialogueState.state = 'askSummary'
 		askNextPrompt(assistant,dialogueState);
 	}
 }
@@ -45,10 +50,11 @@ function askSummary(assistant, dialogueState){
 
 	//dialogueState.state = 'getSummary'
 	if(!dialogueState.data.summary){
+		dialogueState.state = "getSummary"
 		assistant.ask(inputPrompt,dialogueState);
 	}
 	else{
-		dialogueState.state = 'getSummary'
+		dialogueState.state = 'done'
 		askNextPrompt(assistant,dialogueState);	
 	}
 }

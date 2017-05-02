@@ -22,8 +22,9 @@ let express = require('express');
 let bodyParser = require('body-parser');
 
 let promptUserCreateIssue = require('./PromptUserCreateIssue.js')
-let consumeCreateIssueInputs = require('./ConsumeCreateIssueInput.js')
-let moveIssue = require('./moveIssue.js')
+let consumeInputs = require('./ConsumeInputs.js')
+let promptUserMoveIssue= require('./PromptUserMoveIssue.js')
+
 
 
 let app = express();
@@ -34,21 +35,21 @@ app.use(bodyParser.json({type: 'application/json'}));
 
 function mainIntent (assistant) {
 	console.log('mainIntent: '+ assistant);
-	promptUserCreateIssue.askNextPrompt(assistant,{'state':'start','data':{}})
+	promptUserCreateIssue.askNextPrompt(assistant,{'state':'start','data':{},'function':'create'})
 }
 
 function rawInput (assistant) {
 	console.log('rawInputIssueType: \'' +assistant.getRawInput()+'\'');
 	let dialogueState = assistant.getDialogState();
 	console.log('state: \''+ JSON.stringify(dialogueState) +'\'')
-	consumeCreateIssueInputs.consumeInputCorrectly(assistant,assistant.getDialogState())
+	consumeInputs.consumeInputCorrectly(assistant,assistant.getDialogState())
 }
 
 function createIntent(assistant){
 	console.log('create intent')
 	let issueType = assistant.getArgument('issueType');
 	let summary = assistant.getArgument('summary');
-	let dialogueState={'state':'start','data':{}}
+	let dialogueState={'state':'start','data':{},'function':'create'}
 	if(issueType){
 		dialogueState.data.issueType = issueType
 	}
@@ -57,6 +58,14 @@ function createIntent(assistant){
 	}
 	console.log('issueType: \''+ JSON.stringify(issueType) +'\'')
 	promptUserCreateIssue.askNextPrompt(assistant,dialogueState)
+}
+
+function moveIntent(assistant){
+	console.log('create intent')
+	let issueType = assistant.getArgument('issueType');
+	let summary = assistant.getArgument('summary');
+	let dialogueState={'state':'start','data':{},'function':'move'}
+	promptUserMoveIssue.askNextPrompt(assistant,dialogueState)
 }
 
 app.post('/', function (request, response) {
@@ -68,6 +77,7 @@ app.post('/', function (request, response) {
 	let actionMap = new Map();
 	actionMap.set(assistant.StandardIntents.MAIN, mainIntent);
 	actionMap.set('assistant.intent.create', createIntent);
+	actionMap.set('assistant.intent.move', moveIntent)
 	actionMap.set(assistant.StandardIntents.TEXT, rawInput);
 
 	assistant.handleRequest(actionMap);

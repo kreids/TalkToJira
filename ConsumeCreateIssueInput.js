@@ -3,18 +3,18 @@
  */
 
 let promptUserCreateIssue = require('./PromptUserCreateIssue.js')
-let createIssue=require('./createIssue.js')
+let createIssue=require('./JiraControler/createIssue.js')
 
 
 function consumeInputCorrectly(assistant,dialogueState){
 	console.log("STATE::::::::: "+dialogueState.state)
 	switch(dialogueState.state){
-	case 'start':
-		dialogueState.state = "getIssueType"
+	case 'getIssueType':
+		dialogueState.state = "askSummary"
 		getIssueType(assistant,dialogueState,promptUserCreateIssue.askNextPrompt);
 		break;
-	case 'getIssueType':
-		dialogueState.state = "getSummary"
+	case 'getSummary':
+		dialogueState.state = "done"
 		getSummary(assistant,dialogueState,promptUserCreateIssue.askNextPrompt);
 		break;
 	}
@@ -26,9 +26,10 @@ function getIssueType(assistant, dialogueState, onSuccess){
 
 	//let dialogueState = assistant.getDialogState();
 	console.log(JSON.stringify(dialogueState));
-	dialogueState.data.issueType = input;
 	
 	if(input==='story'){
+		dialogueState.data.issueType="story"
+		dialogueState.state="askSummary"
 		onSuccess(assistant, dialogueState);
 		//assistant.ask(inputPrompt, dialogueState);
 	}else if(input==='task'){
