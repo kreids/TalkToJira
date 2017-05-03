@@ -2,7 +2,8 @@
  * http://usejsdoc.org/
  */
 
- let createIssue=require('../JiraControler/createIssue.js')
+
+
 
 
 function askNextPrompt(assistant,dialogueState){
@@ -63,7 +64,7 @@ function complete(assistant, dialogueState){
 	console.log("**COMPLETE**");
 
 	assistant.tell("Creating a "+ dialogueState.data.issueType+" with summary: "+ dialogueState.data.summary);
-	createIssue.makeIssue(dialogueState.data.summary,dialogueState.data.issueType);
+	//createIssue.makeIssue(dialogueState.data.summary,dialogueState.data.issueType);
 }
 
 module.exports = {

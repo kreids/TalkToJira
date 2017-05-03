@@ -12,7 +12,7 @@ function placeHolder(error,responce,body){
 	console.log(body)
 }
 
-function makeIssue(summary, type){
+function makeIssue(summary, type, callBack){
 	let jiraOptions = {
 			"fields":{
 				"project":{
@@ -34,7 +34,7 @@ function makeIssue(summary, type){
 			'json': jiraOptions
 			
 	}
-	request(httpOptions, placeHolder)
+	request(httpOptions, callBack)
 	
 }
 

@@ -8,7 +8,7 @@ function placeHolder(error,responce,body){
 	console.log(body)
 }
 
-function executeTransition(key,transitionId){
+function executeTransition(key,transitionId,callBack){
 	let httpOptions = {
 			'url' : jiraConf.auth.url+'/rest/api/2/issue/'+key+'/transitions',
 			'method': "POST",
@@ -20,17 +20,17 @@ function executeTransition(key,transitionId){
 			}
 			
 	}
-	request(httpOptions, placeHolder)
+	request(httpOptions, callBack)
 
 }
 
-function makeMoveIssue(key,status){
+function makeMoveIssue(key,status,finalCallBack){
 	return function(error,responce,body){
 		let transitions = JSON.parse(body).transitions
 		for (var i = 0, len = transitions.length; i < len; i++) {
 			if(transitions[i].name===status){
   				console.log(transitions[i])
-  				executeTransition(key,transitions[i].id)
+  				executeTransition(key,transitions[i].id,finalCallBack)
   			}
 		}
 	}
@@ -49,10 +49,10 @@ function getTransitions(key, callback){
 	
 }
 
-function moveIssueToStatus(key,status){
+function moveIssueToStatus(key,status, finalCallBack){
 	console.log(key)
 	console.log(status)
-	getTransitions(key,makeMoveIssue(key,status))
+	getTransitions(key,makeMoveIssue(key,status,finalCallBack))
 
 }
 
