@@ -2,7 +2,8 @@
  * http://usejsdoc.org/
  */
 
-
+let callBackCreator = require('../JiraControler/CallBackCreator.js')
+let createIssue=require('../JiraControler/createIssue.js')
 
 
 
@@ -63,8 +64,12 @@ function askSummary(assistant, dialogueState){
 function complete(assistant, dialogueState){
 	console.log("**COMPLETE**");
 
-	assistant.tell("Creating a "+ dialogueState.data.issueType+" with summary: "+ dialogueState.data.summary);
-	//createIssue.makeIssue(dialogueState.data.summary,dialogueState.data.issueType);
+	createIssueCallBack = callBackCreator.makeCallBack(
+		assistant,
+		"Creating a "+ dialogueState.data.issueType+" with summary: "+ dialogueState.data.summary,
+		"Unable to create your issue at this time."
+	)
+	createIssue.makeIssue(dialogueState.data.summary,dialogueState.data.issueType, createIssueCallBack)
 }
 
 module.exports = {

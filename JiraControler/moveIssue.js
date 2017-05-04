@@ -2,11 +2,6 @@ let request = require('request')
 
 let jiraConf =require('../jiraConf')
 
-function placeHolder(error,responce,body){
-	console.log(error)
-	console.log("statusCode: "+responce.statusCode)
-	console.log(body)
-}
 
 function executeTransition(key,transitionId,callBack){
 	let httpOptions = {

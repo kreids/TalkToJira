@@ -3,8 +3,7 @@
  */
 
 let promptUserCreateIssue = require('../PromptUser/PromptUserCreateIssue.js')
-let callBackCreator = require('../JiraControler/CallBackCreator.js')
-let createIssue=require('../JiraControler/createIssue.js')
+
 
 
 function consumeInputCorrectly(assistant,dialogueState){
@@ -16,7 +15,7 @@ function consumeInputCorrectly(assistant,dialogueState){
 		break;
 	case 'getSummary':
 		dialogueState.state = "done"
-		getSummary(assistant,dialogueState);
+		getSummary(assistant,dialogueState,promptUserCreateIssue.askNextPrompt);
 		break;
 	}
 }
@@ -38,22 +37,17 @@ function getIssueType(assistant, dialogueState, onSuccess){
 	}
 }
 
-function getSummary(assistant,dialogueState){
+function getSummary(assistant,dialogueState, onSuccess){
 	//let dialogueState = assistant.getDialogState();
 	console.log("**GETSUMMARY**");
 
 	let input = assistant.getRawInput();
 	
 	dialogueState.data.summary = input;
+	dialogueState.state="done"
 
-	createIssueCallBack = callBackCreator.makeCallBack(
-			assistant,
-			"Creating a "+ dialogueState.data.issueType+" with summary: "+ dialogueState.data.summary,
-			"Unable to create your issue at this time."
-			)
-	createIssue.makeIssue(dialogueState.data.summary,dialogueState.data.issueType, createIssueCallBack)
-	
-	//onSuccess(assistant, dialogueState);
+
+	onSuccess(assistant, dialogueState);
 	
 }
 

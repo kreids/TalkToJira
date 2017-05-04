@@ -1,6 +1,5 @@
 let promptUserMoveIssue = require('../PromptUser/PromptUserMoveIssue.js')
-let callBackCreator = require('../JiraControler/CallBackCreator.js')
-let moveIssue=require('../JiraControler/moveIssue.js')
+
 
 function consumeInputCorrectly(assistant,dialogueState){
 	console.log("STATE::::::::: "+dialogueState.state)
@@ -11,7 +10,7 @@ function consumeInputCorrectly(assistant,dialogueState){
 		break;
 	case 'getNewStatus':
 		dialogueState.state = "done"
-		getNewStatus(assistant,dialogueState);
+		getNewStatus(assistant,dialogueState, promptUserMoveIssue.askNextPrompt);
 		break;
 	}
 }
@@ -29,7 +28,7 @@ function getIssueId(assistant, dialogueState, onSuccess){
 	onSuccess(assistant, dialogueState);
 }
 
-function getNewStatus(assistant, dialogueState){
+function getNewStatus(assistant, dialogueState, onSuccess){
 	let input = assistant.getRawInput();
 	console.log("**GETNEWSTATUS**");
 
@@ -37,14 +36,7 @@ function getNewStatus(assistant, dialogueState){
 
 	//let dialogueState = assistant.getDialogState();
 	console.log(JSON.stringify(dialogueState));
-	moveIssueCallBack = callBackCreator.makeCallBack(
-			assistant,
-			"Moving a "+ dialogueState.data.issueId+" to "+ dialogueState.data.newStatus,
-			"Unable to move your issue at this time."
-			)
-	moveIssue.moveIssueToStatus(dialogueState.data.issueId,
-		dialogueState.data.newStatus, moveIssueCallBack)
-	
+	onSuccess(assistant, dialogueState);
 	
 }
 

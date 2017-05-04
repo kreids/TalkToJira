@@ -1,4 +1,5 @@
 let moveIssue=require('../JiraControler/moveIssue.js')
+let callBackCreator = require('../JiraControler/CallBackCreator.js')
 
 
 function askNextPrompt(assistant,dialogueState){
@@ -28,8 +29,15 @@ function askIssueId(assistant,dialogueState){
 			'What issue would you like to move?',
 			['I didn\'t hear an issue']);
 	console.log("**ASKISSUEID**");
-	
-	assistant.ask(inputPrompt,dialogueState);
+
+	if(!dialogueState.data.issueId){
+		dialogueState.state="getIssueId"
+		assistant.ask(inputPrompt,dialogueState);
+	}
+	else{
+		dialogueState.state = 'askNewStatus'
+		askNextPrompt(assistant,dialogueState);
+	}
 }
 
 function askNewStatus(assistant,dialogueState){
@@ -37,16 +45,25 @@ function askNewStatus(assistant,dialogueState){
 			'Where would you like to move the issue?',
 			['I didn\'t hear a status']);
 	console.log("**ASKNEWSTATUS**");
-	dialogueState.state = "getNewStatus"
-	assistant.ask(inputPrompt,dialogueState);
-	
+	if(!dialogueState.data.issueId){
+		dialogueState.state = "getNewStatus"
+		assistant.ask(inputPrompt,dialogueState);
+	}
+	else{
+		dialogueState.state = 'done'
+		askNextPrompt(assistant,dialogueState);	
+	}
 }
 
 function complete(assistant, dialogueState){
 	console.log("**COMPLETE**");
-
-	assistant.tell("Moving "+ dialogueState.data.issueId+" to "+ dialogueState.data.newStatus);
-	moveIssue.moveIssueToStatus(dialogueState.data.issueId,dialogueState.data.newStatus);
+	moveIssueCallBack = callBackCreator.makeCallBack(
+			assistant,
+			"Moving a "+ dialogueState.data.issueId+" to "+ dialogueState.data.newStatus,
+			"Unable to move your issue at this time."
+	)
+	
+	moveIssue.moveIssueToStatus(dialogueState.data.issueId,dialogueState.data.newStatus, moveIssueCallBack);
 }
 
 module.exports = {
